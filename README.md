@@ -80,13 +80,13 @@ hostnamectl set-hostname BR-SRV; exec bash
 |                 | 192.168.0.1/24 255.255.255.0     | 2001:11::1/64                   | ens224 ISP to HQ-R               |
 |                 | 192.168.1.1/24 255.255.255.0     | 2001:22::1/64                   | ens256 ISP to BR-R              |
 | HQ-R            | 192.168.0.2/24 255.255.255.0        | 2000:100::3f/122        | ens192 HQ-R to ISP           |
-|                 | 10.0.0.1/26 255.255.255.0        |    2001:100::1/64		                | ens224 to HQ               |
-| HQ-SRV          | 10.0.0.2/26 255.255.255.192        | 2000:100::1/122       | ens192 to HQ-R           |
+|                 | 10.0.0.1/28 255.255.255.0        |    2001:100::1/64		                | ens224 to HQ               |
+| HQ-SRV          | 10.0.0.2/28 255.255.255.192        | 2000:100::1/122       | ens192 to HQ-R           |
 | BR-R            | 192.168.1.2/24 255.255.255.0     | 2000:200::f/124       | ens160 BR-R to ISP           |
-|                 | 10.0.2.1/28 255.255.255.240     | 2001:100::2/64	                   | ens192 to BR               |
+|                 | 10.0.2.1/29 255.255.255.240     | 2001:100::2/64	                   | ens192 to BR               |
 | BR-SRV          | 10.0.2.2/28 255.255.255.240     | 2000:200::1/124       | ens192 to BR-R           |
-| HQ-CLI          | 10.0.0.3/26 255.255.255.192        | 2000:100::5/122       |            |
-| HQ-AD           | 10.0.0.4/26 255.255.255.192       | 2000:100::2/122       |            |  
+| HQ-CLI          | 10.0.0.3/29 255.255.255.192        | 2000:100::5/122       |            |
+| HQ-AD           | 10.0.0.4/29 255.255.255.192       | 2000:100::2/122       |            |  
 
 **c.	Пул адресов для сети офиса BRANCH - не более 16**  
 
@@ -94,7 +94,7 @@ hostnamectl set-hostname BR-SRV; exec bash
 
 **d.	Пул адресов для сети офиса HQ - не более 64**  
 
-255.255.255.192 = /26  
+255.255.255.192 = /29  
 
 ## Настройка адресации  
 **Назначаем адресацию согласно ранее заполненной таблицы №1**  
@@ -245,7 +245,7 @@ vtysh
 conf t
 router ospf
 passive-interface default
-network 10.0.0.0/26 area 0
+network 10.0.0.0/28 area 0
 network 172.16.0.0/24 area 0
 exit
 interface tun1
@@ -290,7 +290,7 @@ vtysh
 conf t
 router ospf
 passive-interface default
-network 10.0.2.0/28 area 0
+network 10.0.2.0/29 area 0
 network 172.16.0.0/24 area 0
 exit
 interface tun1
@@ -516,7 +516,7 @@ nft list ruleset
 
 ```
 systemctl enable --now nftables.service
-nft add rule inet filter input ip saddr 10.0.1.2 tcp dport 2222 counter drop
+nft add rule inet filter input ip saddr 10.0.1.2 tcp dport 3035 counter drop
 ```
 ![image](https://github.com/NyashMan/DEMO2024/assets/1348639/6eeaf5e0-22d3-4342-89ec-ec5fd4a7fcbd)  
 
